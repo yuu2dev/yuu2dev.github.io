@@ -1,0 +1,13 @@
+<nav class="pagination" role="pagination">
+    {% if paginator.previous_page %}
+        {% if paginator.previous_page == 1 %}
+            <a class="newer-posts" href="/" title="Previous Page">&laquo; 최근 작성글</a>
+        {% else %}
+            <a class="newer-posts" href="{{'/page'paginator.previous_page | relative_url}}/" title="Previous Page">&laquo; 최근 작성글</a>
+      {% endif %}
+    {% endif %}
+    <span class="page-number"> Page {{paginator.page}} of {{paginator.total_pages}} </span>
+    {% if paginator.next_page %} 
+        <a class="older-posts" href="{{'/page'paginator.next_page | relative_url }}/" title="Next Page">예전 작성글 &raquo;</a>
+    {% endif %} 
+</nav>
