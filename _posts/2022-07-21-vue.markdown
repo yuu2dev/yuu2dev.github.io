@@ -1,10 +1,18 @@
 ---
 layout: post
-title:  "vue.js 에 대해서 정리하기"
-categories: js vue
+title:  vue.js 정리하기
+categories: vue
 ---
 
-블로그 개설한 김에 vue.js 에 대해서 알아볼까요 ?
+일본에서 웹 솔루션 회사를 다닐적에 연수 중 첫 어플리케이션을 react 로 만들었습니다.      
+그래서인가 react 를 개인적으로 각별히 생각하고 있습니다. vue 에 대해서는 어렴풋이 알고는 있지만 항상 뒷전이였어요. 
+      
+하지만, 어느새부턴가 react 보다 vue 를 더 많이 다루게 되었습니다. 언젠가 잊어버려도 
+이 글을 읽으면 다시 이해할 수 있게 vue 에 대해서 핵심만 요약하여 정리합니다.
+
+---
+
+### 시작하기
 
 ```js
 // vue3
@@ -12,6 +20,7 @@ import { createApp } from 'vue';
 import App from 'App.vue';
 const app = createApp(App); 
 app.mount('#app');
+
 // vue2
 var vue = new Vue({
     el: '#app',
@@ -20,7 +29,7 @@ var vue = new Vue({
 ```
 
 ### computed
-> `method` 와 유사하나 다른점은 바로 <캐싱> 
+> `method` 와 다른점은 연관 데이터를 캐싱되어  실행
 
 ```html
 <template>    
@@ -55,23 +64,17 @@ export default {
 `computed` 프로퍼티를 사용 할 때에는 괄호를 붙여서는 안됩니다.    
 무언가를 출력하고자 할 때 주로 사용합니다.    
 
----
-
-### Component
+### component
 > 재사용하기 위한 부품 !
 
-#### 전역 선언
 ```js
-// main.js
+// 전역 방식
 import ExpComponent from './components/ExpComponent.vue';
 
 app.component('exp-component' ExpComponent);
 app.mount('#app');
-```
 
-#### 지역 선언
-
-```js
+// 지역 방식
 import ExpComponent from './components/ExpComponent';
 export default () {
     components: {
@@ -81,7 +84,7 @@ export default () {
 ```
 
 ### props
-> 부품에 필요한 재료
+> 컴포넌트의 속성
 
 ```html
 # App.vue
@@ -301,17 +304,17 @@ app.use(router)
 app.mount('#app');
 ```
 
-💡 `createRouter` Vue2 에서 `new Router()` 에 해당한다.    
-💡 `createWebHistory` 는 `HTML5` 모드에 해당한다.    
+💡 `createRouter` Vue2 에서 `new Router()` 에 해당합니다.    
+💡 `createWebHistory` 는 `HTML5` 모드에 해당합니다.    
 
 `routes` 에 경로 들을 할당하면 된다. 우선 간단한 메인 페이지를 예로 들어봅니다.     
 
 ```js
 /* 
     name:      라우트 객체의 명칭이자 식별키
-    redirect:  path 값에서 redirect 값으로 리다이렉트 한다
-    alias:     alias 값으로 와도 path 값으로 인식하게 한다
-    meta:      아무 값이나 담아두고 사용 할 수 있다. (주로 네비게이션 가드에서 사용)
+    redirect:  path 값에서 redirect 값으로 리다이렉트 합니다.
+    alias:     alias 값으로 와도 path 값으로 인식하게 합니다.
+    meta:      아무 값이나 담아두고 사용 할 수 있습니다. (주로 네비게이션 가드에서 사용)
     component: router-view 에서 보여줄 컴포넌트
 */
 { 
