@@ -1,0 +1,104 @@
+---
+layout: post
+title:  자바에서 스레드를 사용하는 법
+categories: java
+---
+
+ 운영체제는 여러가지 작업을 동시에 처리 하기 위해 적절하게 메모리 자원을 프로세스마다 할당하고 병렬로 실행시킨다고 합니다.    
+    
+ 더군다나 한 개의 프로세스에서도 여러가지 작업을 처리 할 수 있는데 자바에서는 어떻게 이를 처리할까요 ?
+
+### 동시성과 병렬성
+
+`동시성`은 `하나의 코어` 에서 `다중` 스레드가 번갈아가며 실행하는 성질     
+`병렬성`은 `여러개 코어` 에서 `단일` 스레드를 동시에 실행하는 성질   
+
+### 메인 스레드
+
+```java
+public static void main(String[] args) {
+  System.out.println(Thread.currentThread());
+}
+```
+main 함수는 기본적으로 하나의 스레드를 가지고 있는데 이를 `메인스레드` 라고 합니다.
+
+## 작업 스레드
+
+```java
+Thread threadA = new Thread(() -> {
+  System.out.println("A");
+});
+Thread threadB = new Thread(() -> {
+  System.out.println("B");
+});
+threadA.start();
+threadB.start();
+```
+
+### Thread 직접 생성
+
+```java
+Thread thread = new Thread(Runnable runnable)
+```
+
+`Runnable` 은 인터페이스입니다. 작업스레드 객체를 만들기 위해서 구현 클래스는 `run()` 함수를 재정의해야 합니다.
+
+```java
+// 익명객체로 생성하기
+Thread thread = new Thread() {
+  @Override
+  public void run() {
+    ...
+  }
+};
+// 람다식으로 생성하기
+Thread thread = new Thread(() -> {
+  ...
+});
+
+// Runnable 구현객체로 생성하기
+class WorkThread implements Runnable {
+  public void run() {
+    ...
+  }
+}
+```
+
+## 스레드풀
+
+병렬 작업 처리를 제어하기 위해서 스레드 풀을 사용하여야 합니다.
+
+```java
+ExecutorService executorService = Executors.newCachedThreadPool()
+```
+
+이 외 ExecutorService 구현 객체는 다음과 같습니다.
+
+
+| 메소드명 | 초기 스레드 수 | 코어 스레드 수 | 최대 스레드 수 |
+| :--- | :--- | :--- | :--- |
+| newCachedThreadPool() | 0 | 0 | Integer.MAX_VALUE |
+| newFixedThreadPool(int threads) | 0 | threads | threads |
+
+💡 병렬 작업처리를 작업 큐에서 처리 할 수 있도록 자바는 `java.util.concurrent` 패키지의 `ExecutorService` 인터페이스와 `Executors` 클래스를 제공합니다   
+   
+매개변수에는 CPU의 코어 갯수 만큼 정의 할 수도 있습니다.
+
+```java
+int count = Runtime.getRuntime().availableProcessors()
+ExecutorService executorService = newFixedThreadPool(count)
+```
+
+## 이름 설정
+
+스레드는 고유의 이름을 가지고 있습니다. 주로 로그를 남길 때 사용합니다.
+
+```java
+public class WorkThread extends Thread {
+    @Overirde
+    public void run() {
+        setName("Thread-A")
+        System.out.println(getName());
+    }
+}
+```

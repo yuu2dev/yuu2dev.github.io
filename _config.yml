@@ -1,6 +1,6 @@
 name: yuu2dev
-description: 풀스택 개발을 위한 기술 블로그 입니다
-meta_description: "Your New Jekyll Site, Blogging about stuffs"
+description: 풀스택을 위한 기술 블로그 입니다
+meta_description: ""
 
 markdown: kramdown
 highlighter: rouge
