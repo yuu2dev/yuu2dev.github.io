@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  vue.js 가이드라인
+title:  vue 가이드라인
 categories: vue
 ---
 

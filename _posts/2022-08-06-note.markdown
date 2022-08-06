@@ -1,0 +1,80 @@
+---
+layout: post
+title:  git rebase 로 커밋 메시지 편집 하기
+categories: git
+---
+
+`git rebase` 는 변경분 통합시 커밋이력을 정리하기 위해 주로 사용합니다. *git merge* 커맨드와 자주 헷갈리긴 합니다만 확실한 차이가 있습니다. 
+   
+git rebase 는 merge 대상 브랜치를 현재 기준 브랜치로 집어넣은 다음 현재 브랜치를 대상 브랜치보다 앞으로 가게 됩니다. 리베이스 기능으로 이전에 반영했던 커밋 내역을 편집해봅시다.
+    
+```sh
+# n 은 정수형 인자 값 (현재 위치로부터 이전 커밋까지의 갯수)
+git rebase -i head~n
+# 또는
+git rebase -i ${직전 커밋 번호}
+```
+💡 `-i` 또는 `--interactive` 는 대화형으로 실행하겠다는 옵션   
+    
+위 값을 적절하게 지정하여 커맨드를 입력해 주세요.
+
+```sh
+pick 22b18f1 Build: 타입스크립트 프로젝트 생성 및 환경설정
+
+# Rebase 7582f80..22b18f1 onto 7582f80 (1 command)
+#
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup [-C | -c] <commit> = like "squash" but keep only the previous
+#                    commit's log message, unless -C is used, in which case
+#                    keep only this commit's message; -c is same 
+```
+
+`pick` 은 반영된 상태 그대로를 뜻합니다.   
+`reword` 는 커밋 문구만 바꾸겠다는 의미입니다.   
+`edit` 은 작업물을 포함하여 커밋을 아예 되돌립니다.   
+
+문구만 바꿀 것이므로 pick 을 *reword* 로 바꾸어주세요.
+
+```sh
+Build: 타입스크립트 프로젝트 생성 및 환경설정
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Date:      Fri Aug 5 00:21:00 2022 +0900
+#
+# interactive rebase in progress; onto 7582f80
+# Last command done (1 command done):
+#    reword 22b18f1 Build: 타입스크립트 프로젝트 생성 및 환경설정
+# No commands remaining.
+# You are currently editing a commit while rebasing branch 'main' on '7582f80'.
+#
+# Changes to be committed:
+#	new file:   index.ts
+#	new file:   src/types/table.ts
+#	new file:   tsconfig.json
+#
+```
+문구를 수정할 해당 커밋의 문구를 변경하면 됩니다. *head~n* 만큼 역방향으로 이동하여 위 작업을 반복해야 합니다.    
+   
+-i 옵션 없이 리베이스를 진행하는 경우 변경을 보존하거나 취소하려면 다음 커맨드를 통해 작업해야 합니다.
+```
+git rebase --continue (계속하기)
+git rebase --abort (취소하기)
+```
+   
+리베이스 이후 로컬과 원격저장소의 날짜 및 시간이 일치하지 않는다면 다음 커맨드를 입력해 주세요.
+
+```
+git filter-branch --env-filter 'export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"'
+```
+
+마지막으로 원격저장소에 반영합니다. 
+
+```
+git push -f
+```

@@ -331,6 +331,7 @@ code, tt {
     white-space: pre-wrap;
     background: #F7FAFB;
     border-radius: 6px;
+    border: 1px solid #009999
 }
 
 pre {
